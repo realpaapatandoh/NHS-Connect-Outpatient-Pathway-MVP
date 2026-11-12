@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NHS Outpatient Pathway MVP</title>
+<style>
+:root{--nav:#123b63;--nav2:#0b2d4a;--accent:#007f8b;--bg:#f4f6f8;--card:#fff;--text:#172b3a;--muted:#607080;--danger:#c62828;--warn:#b26a00;--ok:#19734a;--line:#d8e0e7}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{display:flex;min-height:100vh}.sidebar{width:250px;background:var(--nav);color:#fff;padding:20px 14px;position:fixed;inset:0 auto 0 0;overflow:auto}.brand{font-weight:700;font-size:19px;padding:8px 10px 22px}.brand small{display:block;font-size:11px;font-weight:400;opacity:.8;margin-top:5px}
+.navbtn{width:100%;text-align:left;background:transparent;border:0;color:#dbe9f4;padding:11px 12px;border-radius:6px;margin:2px 0}.navbtn:hover,.navbtn.active{background:#1c527f;color:#fff}.section{font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.65;margin:18px 10px 7px}
+.main{margin-left:250px;width:calc(100% - 250px)}.topbar{height:64px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 25px;position:sticky;top:0;z-index:5}.role{font-weight:700}.pill{border-radius:18px;padding:5px 10px;font-size:12px;background:#e8f1f7}
+.content{padding:25px;max-width:1500px;margin:auto}.page-title{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:18px}.page-title h1{margin:0 0 5px;font-size:25px}.muted{color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;box-shadow:0 1px 2px #00000008}.metric .num{font-size:28px;font-weight:700;margin:8px 0}.metric .label{color:var(--muted);font-size:13px}.metric .trend{font-size:12px}.good{color:var(--ok)}.bad{color:var(--danger)}.warn{color:var(--warn)}
+.actions{display:flex;flex-wrap:wrap;gap:8px}.btn{border:1px solid #9fb0bd;background:#fff;color:var(--text);padding:9px 13px;border-radius:5px}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn.dark{background:var(--nav);color:#fff;border-color:var(--nav)}.btn.danger{background:#fff0f0;color:var(--danger);border-color:#efb6b6}.btn.small{padding:6px 9px;font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f5f8fa;color:#4b5c69;font-size:12px}.status{display:inline-block;padding:4px 8px;border-radius:12px;font-size:11px;font-weight:700;background:#eef2f5}.status.green{background:#e6f5ed;color:#17633f}.status.amber{background:#fff3dc;color:#8a5600}.status.red{background:#fdeaea;color:#a51f1f}.status.blue{background:#e7f1fb;color:#175786}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:700}.field input,.field select,.field textarea{border:1px solid #b9c6cf;border-radius:5px;padding:9px;background:#fff}.field textarea{min-height:85px;resize:vertical}
+.timeline{display:flex;align-items:center;gap:0;margin:20px 0}.step{flex:1;text-align:center;position:relative}.step:not(:last-child):after{content:"";height:2px;background:#c8d3db;position:absolute;top:14px;left:50%;right:-50%;z-index:0}.dot{width:28px;height:28px;border-radius:50%;background:#d9e2e8;margin:auto;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;font-size:12px}.step.done .dot{background:var(--accent);color:#fff}.step.current .dot{background:#fff;border:3px solid var(--accent)}.step span{display:block;font-size:11px;margin-top:7px;color:var(--muted)}
+.alert{padding:12px;border-radius:6px;background:#fff7e6;border-left:4px solid #d58a00;font-size:13px}.info{background:#eaf5f7;border-left-color:#0a8290}.dangerbox{background:#fff0f0;border-left-color:#c62828}
+.bar{height:9px;background:#e5eaee;border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent)}
+.search{display:flex;gap:8px;margin-bottom:12px}.search input{flex:1;padding:9px;border:1px solid #b9c6cf;border-radius:5px}
+.kpirow{display:flex;justify-content:space-between;font-size:12px;margin:8px 0 4px}.empty{padding:30px;text-align:center;color:var(--muted)}
+footer{margin-top:25px;color:#71808c;font-size:11px}
+@media(max-width:1000px){.grid,.grid3{grid-template-columns:repeat(2,1fr)}.sidebar{width:210px}.main{margin-left:210px;width:calc(100% - 210px)}}
+@media(max-width:720px){.sidebar{position:static;width:100%;height:auto}.app{display:block}.main{margin-left:0;width:100%}.grid,.grid2,.grid3,.form{grid-template-columns:1fr}.topbar{position:static}.content{padding:15px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+<div class="brand">NHS Outpatient Pathway MVP<small>Referral & Patient Journey Management</small></div>
+<div class="section">Portals</div>
+<button class="navbtn active" data-view="patient">Patient Portal</button>
+<button class="navbtn" data-view="admin">Administration</button>
+<button class="navbtn" data-view="clinical">Practitioner / Clinical</button>
+<button class="navbtn" data-view="management">Management</button>
+<div class="section">Core workflow</div>
+<button class="navbtn" data-view="referrals">Referral Queue</button>
+<button class="navbtn" data-view="waiting">Waiting List</button>
+<button class="navbtn" data-view="triage">Triage Queue</button>
+<button class="navbtn" data-view="appointments">Appointments & DNA</button>
+<button class="navbtn" data-view="reports">Progress & KPIs</button>
+<div class="section">Implementation</div>
+<button class="navbtn" data-view="settings">MVP Settings</button>
+<button class="navbtn" data-view="audit">Audit Log</button>
+</aside>
+<main class="main">
+<header class="topbar"><div><span class="role" id="roleTitle">Patient Portal</span></div><div class="actions"><span class="pill">Synthetic data only</span><button class="btn small" id="resetBtn">Reset demo</button></div></header>
+<section class="content" id="app"></section>
+</main>
+</div>
+<script>
+const initial = {
+referrals:[
+{id:"REF-1001",patient:"SYN-001",name:"Amelia Carter",specialty:"Cardiology",site:"Central",priority:"Routine",status:"Waiting",date:"2026-08-04",rttStart:"2026-08-04",wait:53,triage:"Confirmed",next:"Appointment booking",dna:false},
+{id:"REF-1002",patient:"SYN-002",name:"Daniel Smith",specialty:"Gastroenterology",site:"North",priority:"Urgent",status:"Triage",date:"2026-09-02",rttStart:"2026-09-02",wait:24,triage:"Suggested urgent",next:"Clinical review",dna:false},
+{id:"REF-1003",patient:"SYN-003",name:"Priya Shah",specialty:"Dermatology",site:"Central",priority:"2WW",status:"Booked",date:"2026-07-14",rttStart:"2026-07-14",wait:74,triage:"Confirmed",next:"Appointment 30 Sep",dna:false},
+{id:"REF-1004",patient:"SYN-004",name:"James Wilson",specialty:"Orthopaedics",site:"South",priority:"Routine",status:"DNA",date:"2026-06-18",rttStart:"2026-06-18",wait:100,triage:"Confirmed",next:"DNA follow-up",dna:true},
+{id:"REF-1005",patient:"SYN-005",name:"Sofia Evans",specialty:"Neurology",site:"North",priority:"Urgent",status:"Waiting",date:"2026-08-21",rttStart:"2026-08-21",wait:36,triage:"Confirmed",next:"Appointment booking",dna:false}
+],
+audit:[{time:"2026-09-26 19:40",user:"System",action:"MVP loaded",ref:"—"}]
+};
+let db=JSON.parse(localStorage.getItem("nhsMvp")||"null")||structuredClone(initial);
+let view="patient";
+const app=document.getElementById("app");
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function save(){localStorage.setItem("nhsMvp",JSON.stringify(db))}
+function log(action,ref="—"){db.audit.unshift({time:new Date().toLocaleString("en-GB"),user:"Demo User",action,ref});save()}
+function status(s){let c=s==="DNA"||s==="Potential breach"?"red":s==="Triage"||s==="Waiting"||s==="Suggested urgent"?"amber":s==="Booked"||s==="Confirmed"?"green":"blue";return `<span class="status ${c}">${esc(s)}</span>`}
+function metrics(){
+let r=db.referrals, open=r.filter(x=>x.status!=="Completed").length, dna=r.filter(x=>x.dna).length, breach=r.filter(x=>x.wait>=126).length;
+return {total:r.length,open,dna,breach,avg:Math.round(r.reduce((a,b)=>a+b.wait,0)/r.length),urgent:r.filter(x=>x.priority==="Urgent"||x.priority==="2WW").length}
+}
+function shell(title,sub,body,actions=""){app.innerHTML=`<div class="page-title"><div><h1>${title}</h1><div class="muted">${sub}</div></div><div class="actions">${actions}</div></div>${body}<footer>MVP prototype • Synthetic data • Clinical suggestions require clinician confirmation • Not for production NHS use</footer>`}
+function metricCards(m){return `<div class="grid">${[
+["Total referrals",m.total,"Current synthetic caseload",""],
+["Open pathways",m.open,"Not completed",""],
+["Avg. wait",m.avg+" days","Demonstration metric",""],
+["Potential RTT alerts",m.breach,"Review required",m.breach?"bad":"good"]
+].map(x=>`<div class="card metric"><div class="label">${x[0]}</div><div class="num">${x[1]}</div><div class="trend ${x[3]}">${x[2]}</div></div>`).join("")}</div>`}
+function patient(){
+let p=db.referrals[0];
+shell("Patient Portal","Self-service view of referral status, next step, waiting-time estimate and appointment information.",
+`<div class="grid2">
+<div class="card"><h3>My referral</h3><div class="muted">${esc(p.name)} • ${esc(p.patient)}</div><div style="margin:15px 0"><b>${esc(p.id)}</b> ${status(p.status)}</div>
+<div class="timeline">${["Received","Triaged","Waiting","Booked","Outcome"].map((x,i)=>`<div class="step ${i<2?"done":i===2?"current":""}"><div class="dot">${i<2?"✓":i+1}</div><span>${x}</span></div>`).join("")}</div>
+<div class="alert info"><b>Next step:</b> ${esc(p.next)}<br><span class="muted">Estimated wait: ${p.wait} days (demonstration estimate).</span></div></div>
+<div class="card"><h3>Appointment & communication</h3><p><b>Appointment:</b> ${p.status==="Booked"?"30 September 2026, 10:30":"Not yet booked"}</p><p><b>Preferred contact:</b> SMS</p><div class="actions"><button class="btn primary" onclick="notify('Appointment reminder requested')">Request reminder</button><button class="btn" onclick="notify('Contact request recorded')">Contact service</button></div><hr><p class="muted">This prototype does not send real messages.</p></div></div>
+<div class="card" style="margin-top:15px"><h3>Patient actions</h3><div class="actions"><button class="btn primary" onclick="showView('patientSubmit')">Submit new referral</button><button class="btn" onclick="showView('patient')">Refresh status</button><button class="btn" onclick="notify('Accessibility support request recorded')">Accessibility support</button></div></div>`);
+}
+function patientSubmit(){
+shell("Digital Referral Intake","Structured capture with mandatory-field validation.",
+`<div class="card"><form class="form" id="refForm">
+<div class="field"><label>Patient reference *</label><input name="patient" required value="SYN-006"></div>
+<div class="field"><label>Patient name (synthetic) *</label><input name="name" required value="Alex Morgan"></div>
+<div class="field"><label>Specialty *</label><select name="specialty" required><option>Cardiology</option><option>Dermatology</option><option>Gastroenterology</option><option>Neurology</option><option>Orthopaedics</option></select></div>
+<div class="field"><label>Preferred site *</label><select name="site"><option>Central</option><option>North</option><option>South</option></select></div>
+<div class="field"><label>Referral reason *</label><input name="reason" required placeholder="Synthetic clinical reason"></div>
+<div class="field"><label>Contact preference</label><select name="contact"><option>SMS</option><option>Email</option><option>Phone</option></select></div>
+<div class="field"><label>Clinical priority</label><select name="priority"><option>Routine</option><option>Urgent</option><option>2WW</option></select></div>
+<div class="field"><label>Consent / communication</label><select><option>Confirmed</option><option>Needs review</option></select></div>
+<div class="field full"><label>Additional information</label><textarea placeholder="Synthetic information only"></textarea></div>
+<div class="field full"><div class="actions"><button class="btn primary">Submit referral</button><button type="button" class="btn" onclick="showView('patient')">Cancel</button></div></div>
+</form></div>`);
+document.getElementById("refForm").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target), id="REF-"+(1000+db.referrals.length+1);db.referrals.push({id,patient:f.get("patient"),name:f.get("name"),specialty:f.get("specialty"),site:f.get("site"),priority:f.get("priority"),status:"Triage",date:"2026-09-26",rttStart:"2026-09-26",wait:0,triage:"Pending",next:"Clinical review",dna:false});log("Referral submitted",id);notify("Referral "+id+" submitted successfully");showView("patient")};
+}
+function tableRows(rows,actions=true){return rows.map(r=>`<tr><td><b>${esc(r.id)}</b><br><span class="muted">${esc(r.name)}</span></td><td>${esc(r.specialty)}<br>${esc(r.site)}</td><td>${status(r.priority)}</td><td>${status(r.status)}</td><td>${r.wait} days</td><td>${esc(r.next)}</td><td>${actions?`<div class="actions"><button class="btn small" onclick="openReferral('${r.id}')">Open</button>${r.status==="Triage"?`<button class="btn small primary" onclick="confirmTriage('${r.id}')">Confirm triage</button>`:""}${r.status==="Waiting"?`<button class="btn small" onclick="book('${r.id}')">Book</button>`:""}${r.status==="Booked"?`<button class="btn small danger" onclick="markDna('${r.id}')">Mark DNA</button>`:""}</div>`:""}</td></tr>`).join("")}
+function referrals(){
+shell("Referral Queue","Administration workspace for intake validation, search, assignment and pathway progression.",
+`<div class="card"><div class="search"><input id="refSearch" placeholder="Search reference, patient, specialty or site"><button class="btn" onclick="render()">Search</button><button class="btn primary" onclick="showView('patientSubmit')">+ New referral</button></div>
+<table><thead><tr><th>Referral / Patient</th><th>Specialty / Site</th><th>Priority</th><th>Status</th><th>Wait</th><th>Next step</th><th>Actions</th></tr></thead><tbody id="refBody">${tableRows(db.referrals)}</tbody></table></div>`);
+}
+function waiting(){
+let rows=db.referrals.filter(x=>x.status==="Waiting"||x.status==="Booked"||x.status==="DNA");
+shell("Waiting List","Central operational view of outstanding outpatient pathways.",
+`${metricCards(metrics())}<div class="card" style="margin-top:15px"><table><thead><tr><th>Referral</th><th>Specialty</th><th>Priority</th><th>Pathway</th><th>Wait</th><th>RTT</th><th>Action</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.id)}<br><span class="muted">${esc(r.name)}</span></td><td>${esc(r.specialty)}</td><td>${status(r.priority)}</td><td>${status(r.status)}</td><td>${r.wait} days</td><td>${r.wait>=126?status("Potential breach"):r.wait>=90?status("Monitor"):"On track"}</td><td><button class="btn small" onclick="openReferral('${r.id}')">Open</button></td></tr>`).join("")}</tbody></table></div>`);
+}
+function triage(){
+let rows=db.referrals.filter(x=>x.status==="Triage");
+shell("Clinical Triage Queue","Decision-support view. Suggested priority is advisory; clinician confirmation is required.",
+`<div class="alert info"><b>Clinical safety boundary:</b> The MVP may suggest categorisation from predefined rules, but it must not make a final clinical decision.</div><div class="card" style="margin-top:15px"><table><thead><tr><th>Referral</th><th>Specialty</th><th>Suggested priority</th><th>Reason</th><th>Decision</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td>${esc(r.id)}<br>${esc(r.name)}</td><td>${esc(r.specialty)}</td><td>${status(r.priority)}</td><td>Rule-based demonstration: review referral indicators</td><td><div class="actions"><button class="btn primary small" onclick="confirmTriage('${r.id}')">Confirm</button><button class="btn small" onclick="changePriority('${r.id}')">Amend</button></div></td></tr>`).join(""):`<tr><td colspan="5" class="empty">No referrals awaiting triage.</td></tr>`}</tbody></table></div>`);
+}
+function appointments(){
+let rows=db.referrals.filter(x=>x.status==="Booked"||x.status==="DNA");
+shell("Appointments & DNA","Appointment status, reminder demonstration and DNA management.",
+`<div class="grid3"><div class="card metric"><div class="label">Booked</div><div class="num">${db.referrals.filter(x=>x.status==="Booked").length}</div></div><div class="card metric"><div class="label">DNA</div><div class="num">${metrics().dna}</div></div><div class="card metric"><div class="label">Reminder workflow</div><div class="num">Demo</div></div></div>
+<div class="card" style="margin-top:15px"><table><thead><tr><th>Referral</th><th>Appointment</th><th>Reminder</th><th>Status</th><th>Action</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.id)}<br>${esc(r.name)}</td><td>${r.status==="Booked"?"30 Sep 2026 • 10:30":"Previous appointment"}</td><td>${r.status==="Booked"?"Generated":"—"}</td><td>${status(r.status)}</td><td>${r.status==="Booked"?`<button class="btn small danger" onclick="markDna('${r.id}')">Mark DNA</button>`:`<button class="btn small" onclick="rebook('${r.id}')">Rebook</button>`}</td></tr>`).join("")}</tbody></table></div>`);
+}
+function management(){
+let m=metrics(), specs=[...new Set(db.referrals.map(x=>x.specialty))];
+shell("Management Dashboard","Executive and operational view for demand, RTT, waiting lists, DNA and bottlenecks.",
+`${metricCards(m)}
+<div class="grid2" style="margin-top:15px"><div class="card"><h3>Referral volume by specialty</h3>${specs.map(s=>{let n=db.referrals.filter(x=>x.specialty===s).length;return `<div class="kpirow"><span>${esc(s)}</span><b>${n}</b></div><div class="bar"><i style="width:${n/db.referrals.length*100}%"></i></div>`}).join("")}</div>
+<div class="card"><h3>RTT monitoring</h3><div class="kpirow"><span>Potential breach (126+ days)</span><b>${m.breach}</b></div><div class="bar"><i style="width:${Math.min(100,m.breach/Math.max(1,m.total)*100)}%"></i></div><div class="kpirow"><span>Urgent / 2WW referrals</span><b>${m.urgent}</b></div><div class="bar"><i style="width:${Math.min(100,m.urgent/Math.max(1,m.total)*100)}%"></i></div><p class="muted">Thresholds are configurable demonstration rules and should be validated against current Trust policy before production use.</p></div></div>
+<div class="grid3" style="margin-top:15px"><div class="card"><h3>Operational actions</h3><div class="actions"><button class="btn primary" onclick="showView('reports')">Progress tracker</button><button class="btn" onclick="showView('waiting')">Review backlog</button><button class="btn" onclick="showView('triage')">Review triage</button></div></div><div class="card"><h3>Capacity signals</h3><p>Highest synthetic volume: <b>${esc(specs.sort((a,b)=>db.referrals.filter(x=>x.specialty===b).length-db.referrals.filter(x=>x.specialty===a).length)[0]||"—")}</b></p><p>Sites represented: <b>${new Set(db.referrals.map(x=>x.site)).size}</b></p></div><div class="card"><h3>Patient experience</h3><p>Patient portal status visibility: <span class="status green">Enabled</span></p><p>Reminder workflow: <span class="status blue">Demonstration</span></p></div></div>`);
+}
+function reports(){
+let m=metrics();
+shell("Progress & KPI Tracker","Management control centre for MVP progress and pathway performance.",
+`<div class="grid3"><div class="card"><h3>MVP delivery</h3>${["Digital intake","Referral queue","Clinical triage support","RTT tracking","Waiting list","Patient portal","Management dashboard","Audit trail"].map((x,i)=>`<div class="kpirow"><span>${x}</span><b class="good">✓</b></div>`).join("")}</div>
+<div class="card"><h3>Pathway KPIs</h3>${[["Referral completeness","94%"],["Triage turnaround","1.6 days"],["DNA rate",Math.round(m.dna/Math.max(1,m.total)*100)+"%"],["Average wait",m.avg+" days"],["Open pathways",m.open]].map(x=>`<div class="kpirow"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("")}</div>
+<div class="card"><h3>Management actions</h3><div class="actions"><button class="btn primary" onclick="notify('Action logged: review RTT alerts')">Review RTT alerts</button><button class="btn" onclick="notify('Action logged: review DNA causes')">Review DNA causes</button><button class="btn" onclick="notify('Action logged: review specialty capacity')">Review capacity</button><button class="btn" onclick="notify('Synthetic report generated')">Generate report</button></div></div></div>
+<div class="card" style="margin-top:15px"><h3>Current pathway list</h3><table><thead><tr><th>Referral</th><th>Specialty</th><th>Status</th><th>Wait</th><th>Management flag</th></tr></thead><tbody>${db.referrals.map(r=>`<tr><td>${esc(r.id)}</td><td>${esc(r.specialty)}</td><td>${status(r.status)}</td><td>${r.wait} days</td><td>${r.wait>=126?status("Potential breach"):r.dna?status("DNA"):r.status==="Triage"?status("Clinical review"):"On track"}</td></tr>`).join("")}</tbody></table></div>`);
+}
+function admin(){shell("Administration Portal","Referral processing, waiting-list and exception management.",`${metricCards(metrics())}<div class="grid2" style="margin-top:15px"><div class="card"><h3>Work queue</h3><p>${db.referrals.filter(x=>x.status==="Triage").length} referrals require clinical triage.</p><button class="btn primary" onclick="showView('triage')">Open triage queue</button></div><div class="card"><h3>Exceptions</h3><p>${metrics().dna} DNA cases and ${metrics().breach} potential RTT alerts.</p><button class="btn" onclick="showView('appointments')">Manage appointments</button></div></div>`)}
+function clinical(){shell("Practitioner / Clinical Portal","Structured referral review and clinician-confirmed triage.",`<div class="alert info">Suggested priority is decision support only. The clinician remains responsible for the final triage decision.</div><div class="card" style="margin-top:15px"><button class="btn primary" onclick="showView('triage')">Open clinical triage queue</button><button class="btn" onclick="showView('referrals')" style="margin-left:8px">Browse referrals</button></div>`)}
+function settings(){shell("MVP Settings","Demonstration configuration and implementation guardrails.",`<div class="grid2"><div class="card"><h3>Role access</h3><p>Patient: status and referral submission</p><p>Administrator: intake, queues, waiting list, appointments</p><p>Clinical: triage and clinical confirmation</p><p>Management: dashboards, KPIs and progress tracking</p></div><div class="card"><h3>Safety & data</h3><p>✓ Synthetic data only</p><p>✓ Role separation demonstrated</p><p>✓ Audit events recorded</p><p>✓ Clinical recommendation is not final decision</p><p>⚠ Production identity, NHS interoperability, DPIA, clinical safety case and security controls are outside this MVP.</p></div></div>`)}
+function audit(){shell("Audit Log","Demonstration record of important MVP actions.",`<div class="card"><table><thead><tr><th>Time</th><th>User</th><th>Action</th><th>Referral</th></tr></thead><tbody>${db.audit.slice(0,30).map(a=>`<tr><td>${esc(a.time)}</td><td>${esc(a.user)}</td><td>${esc(a.action)}</td><td>${esc(a.ref)}</td></tr>`).join("")}</tbody></table></div>`)}
+function openReferral(id){let r=db.referrals.find(x=>x.id===id);if(!r)return;shell("Referral Detail",`${esc(r.id)} • synthetic patient record`, `<div class="grid2"><div class="card"><h3>Patient & referral</h3><p><b>Patient:</b> ${esc(r.name)} (${esc(r.patient)})</p><p><b>Specialty:</b> ${esc(r.specialty)}</p><p><b>Site:</b> ${esc(r.site)}</p><p><b>Priority:</b> ${status(r.priority)}</p><p><b>Status:</b> ${status(r.status)}</p><p><b>RTT start:</b> ${esc(r.rttStart)}</p></div><div class="card"><h3>Pathway controls</h3><p><b>Next:</b> ${esc(r.next)}</p><p><b>Waiting:</b> ${r.wait} days</p><div class="actions"><button class="btn primary" onclick="book('${r.id}')">Book appointment</button><button class="btn" onclick="confirmTriage('${r.id}')">Confirm triage</button><button class="btn danger" onclick="markDna('${r.id}')">Mark DNA</button></div></div></div><div class="card" style="margin-top:15px"><h3>Clinical / operational notes</h3><textarea style="width:100%;padding:10px;border:1px solid #bcc8d0;border-radius:5px" placeholder="Synthetic note"></textarea></div>`)}
+function confirmTriage(id){let r=db.referrals.find(x=>x.id===id);if(!r)return;r.status="Waiting";r.triage="Confirmed";r.next="Appointment booking";log("Clinician confirmed triage",id);render()}
+function changePriority(id){let r=db.referrals.find(x=>x.id===id);let p=prompt("Set priority: Routine, Urgent or 2WW",r.priority);if(["Routine","Urgent","2WW"].includes(p)){r.priority=p;r.status="Triage";r.triage="Amended";log("Clinician amended priority to "+p,id);render()}}
+function book(id){let r=db.referrals.find(x=>x.id===id);if(!r)return;r.status="Booked";r.next="Appointment 30 Sep 2026";log("Appointment booked",id);notify("Appointment booked for "+id);render()}
+function markDna(id){let r=db.referrals.find(x=>x.id===id);if(!r)return;r.status="DNA";r.dna=true;r.next="DNA follow-up / rebook";log("DNA recorded",id);render()}
+function rebook(id){let r=db.referrals.find(x=>x.id===id);if(!r)return;r.status="Booked";r.dna=false;r.next="Rebooked appointment";log("DNA case rebooked",id);render()}
+function notify(msg){alert(msg)}
+function showView(v){view=v;render()}
+function render(){
+document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+let titles={patient:"Patient Portal",patientSubmit:"Patient Portal",admin:"Administration Portal",clinical:"Practitioner / Clinical Portal",management:"Management Dashboard",referrals:"Referral Queue",waiting:"Waiting List",triage:"Clinical Triage Queue",appointments:"Appointments & DNA",reports:"Progress & KPIs",settings:"MVP Settings",audit:"Audit Log"};
+document.getElementById("roleTitle").textContent=titles[view]||"NHS Outpatient Pathway MVP";
+({patient,patientSubmit,admin,clinical,management,referrals,waiting,triage,appointments,reports,settings,audit}[view]||patient)()
+}
+document.querySelectorAll(".navbtn").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+document.getElementById("resetBtn").onclick=()=>{if(confirm("Reset the synthetic demo data?")){db=structuredClone(initial);save();render()}};
+render();
+</script>
+</body></html>
